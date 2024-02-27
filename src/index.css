@@ -1,7 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+/* custom.css */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
 
 
 * {
@@ -10,25 +26,289 @@
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
-  font-family: 'Inter', sans-serif;
+  font-family: "Manrope", sans-serif;
+  font-size: 14px;
+  /* overflow-x: hidden; */
 }
 
-h1{font-size: 35px;}
-h2{font-size: 32px;}
-h3{font-size: 28px;}
-h4{font-size: 22px;}
-h5{font-size: 20px;}
-h6{font-size: 18px;}
+.settings{
+  background-color: #fff !important;
+}
 
-body{
-  background-color: #fff;
+h1 {
+  font-size: 35px;
+}
+
+h2 {
+  font-size: 32px;
+}
+
+h3 {
+  font-size: 28px;
+}
+
+h4 {
+  font-size: 22px;
+}
+
+h5 {
+  font-size: 20px;
+}
+
+h6 {
+  font-size: 18px;
+}
+
+body {
+  background-color: #F9F6F9;
 }
 
 .overflow-y-scroll::-webkit-scrollbar {
-  width: 0; 
+  width: 0;
 }
 
 .overflow-y-scroll::-webkit-scrollbar-thumb {
-  background-color: transparent; 
+  background-color: transparent;
 }
 
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: #cdcdcd;
+  width: 17px;
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+
+.file-upload-container {
+  display: flex;
+  flex-direction: column;
+  margin: 7px 0;
+  width: 100%;
+  position: relative;
+  border: 2px dashed #ccc;
+  padding: 35px 20px;
+  border-radius: 20px;
+  background-color: #F5F5F5;
+}
+
+.file-upload-container input {
+  display: none;
+}
+
+.file-upload-container label {
+  text-align: center;
+  cursor: pointer;
+
+}
+
+
+.docuemnt-tbody tr {
+  font-weight: 600;
+}
+
+
+.file-upload-container {
+  display: flex;
+  flex-direction: column;
+  margin: 7px 0;
+  width: 100%;
+  position: relative;
+  border: 2px dashed #ccc;
+  padding: 35px 20px;
+  border-radius: 20px;
+  background-color: #F5F5F5;
+}
+
+.file-upload-container input {
+  display: none;
+}
+
+.file-upload-container label {
+  text-align: center;
+  cursor: pointer;
+
+}
+
+
+.docuemnt-tbody tr{
+  font-weight: 400;
+}
+
+.tri-state-toggle {
+  background: rgb(240, 239, 239);
+  box-shadow: inset 0 2px 8px 0 rgb(240, 239, 239);
+  border-radius: 20px;
+  display: inline;
+  overflow: hidden;
+  display: inline-flex;
+  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.tri-state-toggle-button {
+  border-radius: 8px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 86px;
+  background-color: transparent;
+  border: 0px solid transparent;
+  margin: 5px;
+  color: #1F2937;
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+.tri-state-toggle-button-active {
+  background: lightgray;
+  border: 1px solid rgba(207, 207, 207, 0.6);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
+  color: black;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 20px;
+  width: 86px;
+}
+
+.tri-state-toggle-button:focus {
+  outline: none;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: lightgray;
+  border-color: lightgray;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner:after {
+  border-color: black !important;
+}
+
+.ant-steps>.ant-steps-item>.ant-steps-item-container>.ant-steps-item-icon {
+  background-color: #4E2357;
+  border-color: #4E2357;
+}
+
+.ant-steps>.ant-steps-item>.ant-steps-item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ant-steps>.ant-steps-item-wait>.ant-steps-item-container>.ant-steps-item-icon {
+  background-color: white;
+  border-color: gray;
+  color: gray;
+  font-weight: 600;
+}
+
+.ant-steps>.ant-steps-item-wait>.ant-steps-item-container>.ant-steps-item-icon>.ant-steps-icon {
+  background-color: white;
+  border-color: gray;
+  color: gray;
+  font-weight: 600;
+}
+
+.ant-steps-finish-icon {
+  color: white;
+}
+
+.ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-title::after {
+  color: #000000;
+  border-color: #000000;
+  background-color: #000000;
+  height: 2px;
+  margin-top: -30px;
+}
+
+.ant-steps .ant-steps-item-active>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-title::after {
+  color: #000000;
+  border-color: #000000;
+  background-color: #000000;
+  height: 2px;
+  margin-top: -30px;
+}
+
+.ant-steps .ant-steps-item-wait>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-title::after {
+  color: lightgray;
+  border-color: lightgray;
+  background-color: lightgray;
+  height: 2px;
+  margin-top: -30px;
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #000000;
+}
+
+.ant-tabs-ink-bar {
+  border-bottom: 2px solid black;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-steps .ant-steps-item-process>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-title{padding: 0;}
+.custom-css .ant-steps>.ant-steps-item>.ant-steps-item-container>.ant-steps-item-icon{margin: 0;}
+.custom-css .ant-steps>.ant-steps-item>.ant-steps-item-container>.ant-steps-item-icon{
+  /* background-color: #4E2357; */
+}
+
+/* .custom-css .ant-steps-item-content{
+  display: block !important;
+  margin-left: 0px !important;
+} */
+
+/* .custom-css .ant-steps>.ant-steps-item>.ant-steps-item-container{margin: 20px 0 !important;} */
+
+.custom-css .ant-steps>.ant-steps-item>.ant-steps-item-container{flex-direction: row; align-items: center; margin: 1em 0;}
+.custom-css :where(.css-dev-only-do-not-override-1b0bdye).ant-steps.ant-steps-vertical >.ant-steps-item .ant-steps-item-content {
+  margin-left: 12px;
+}
+
+.custom-css :where(.css-dev-only-do-not-override-1b0bdye).ant-steps.ant-steps-vertical >.ant-steps-item:not(:last-child)>.ant-steps-item-container>.ant-steps-item-tail{margin-top: 20px; height: 129px;}
+.custom-css :where(.css-dev-only-do-not-override-1b0bdye).ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after{
+  background-color: #4E2357;
+}
+
+.custom-css .ant-steps-item-title{
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.custom-css .ant-steps-item-description{
+  font-size: 17px;
+  font-weight: 500;
+  padding: 0 !important;
+}
+
+.custom-css :where(.css-dev-only-do-not-override-1b0bdye).ant-steps .ant-steps-item-process>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-title{
+  color: #8c8c8c;
+}
+
+.slick-next:before , .slick-prev:before{display: none;}
+.slick-dots li.slick-active button:before{
+  opacity: 1;
+  color: #4e2357;
+}
+
+:where(.css-dev-only-do-not-override-1b0bdye).ant-switch.ant-switch-checked .ant-switch-inner{
+  background-color: #4e2357;
+}
+
+
+.testing{
+  filter: invert(14%) sepia(13%) saturate(7499%) hue-rotate(284deg) brightness(44%) contrast(200%);
+}
+
+.ant-upload-list-item-container {
+  margin-top: -35px;
+  margin-left: 10px;
+}
+
+.ant-table-content table thead tr th {
+  background: none !important;
+  color: gray !important;
+}

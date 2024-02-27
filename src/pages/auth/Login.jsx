@@ -1,20 +1,116 @@
-import React from 'react'
-import Logo from '../../assets/images/logo.svg'
-import { FaGoogle , FaArrowRightLong } from "react-icons/fa6";
+import React, { useState } from 'react'
+import Logo from '../../assets/images/mauve-single-logo.svg'
+import FullLogo from '../../assets/images/logo.svg'
+import SliderImgOne from '../../assets/images/slider-img-1.svg'
+import LoaderImg from '../../assets/images/loader.png'
+import { FaGoogle , FaArrowRightLong , FaPaperPlane } from "react-icons/fa6";
+import { userLogin , googleLogin } from '../../redux/auth/action';
+import { useDispatch , useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 const Login = () => {
-  return (
+  const [email, setEmail] = useState('');
+
+  const dispatch = useDispatch();
+  const myState = useSelector((state) => state.auth);
+
+
+  const handleLogin = () => {
+    if(email !== ""){
+      dispatch(userLogin(email));
+    }
+    else{
+      toast.error("Enter your Email Please" )
+    }
+  }
+
+  const handleGoogleAuth = () => {
+    dispatch(googleLogin())
+  }
+  // slider setting
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 1000,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    slidesToShow: 1,
+    slidesToScroll: 1
+  };
+
+   return (
     <>
-    <section className="login w-screen h-screen flex items-center justify-center text-black bg-[#EEEEEE]">
-    <div className="login-form flex flex-col items-center justify-center w-[30%] bg-[#fff] px-10 py-10 rounded-3xl border border-[#cdcdcd]">
-      <div className='logo' >
-        <img src={Logo} alt="logo" className='my-2' />
+    <Toaster
+    toastOptions={{
+      duration: 2000,
+      style: {
+        background: '#cdcdcd',
+        color: '#fff',
+      },
+      success: {
+      duration: 2000,
+      theme: {
+        primary: 'green',
+        secondary: 'black',        },
+      },
+      error: {
+        duration: 2000,
+        theme: {
+          primary: 'red',
+          secondary: 'black',
+        },
+      },
+    }}
+    /> 
+    <section className="login w-screen h-screen flex justify-center text-black bg-[#F9F6F9]">
+      <div className='w-[50%]' >
+      <div className="logo px-20 mt-10">
+    <img src={FullLogo} alt="" />
       </div>
-    <div className='py-5 flex flex-col items-center justify-center w-full' >
-    <input type="email" placeholder='enter your email address' className='border border-[#cdcdcd] px-3 py-[7px] rounded-2xl w-full text-black outline-none' />
-    <small className='m-auto my-2' >OR</small>
-    <button className='bg-[#EEEEEE] px-5 py-[5px] rounded-xl flex items-center border-2'> <FaGoogle /> <small className='mx-2' >Continue with Google</small></button>
+      <div className="auth-slider w-full px-20 my-6 w-[90%]">
+      <Slider {...settings}>
+      <div className='flex items-center flex-col' >
+        <img className='w-[90%] m-auto' src={SliderImgOne} alt="" />
+        <h3 className='text-center font-medium' > Get access to the client base</h3>
+        <p className='text-center text-[13px] text-[#8A8A8A] font-light mb-5' >Lorem ipsum dolor sit amet consectetur. Laoreet ipsum amet eget nibh. Diam posuere leo eget pellentesque mattis morbi nulla imperdiet turpis.</p>
+      </div>
+      <div className='flex items-center flex-col' >
+        <img className='w-[90%] m-auto' src={SliderImgOne} alt="" />
+        <h3 className='text-center font-medium' > Get access to the client base</h3>
+        <p className='text-center text-[13px] text-[#8A8A8A] font-light' >Lorem ipsum dolor sit amet consectetur. Laoreet ipsum amet eget nibh. Diam posuere leo eget pellentesque mattis morbi nulla imperdiet turpis.</p>
+      </div>
+      <div className='flex items-center flex-col' >
+        <img className='w-[90%] m-auto' src={SliderImgOne} alt="" />
+        <h3 className='text-center font-medium' > Get access to the client base</h3>
+        <p className='text-center text-[13px] text-[#8A8A8A] font-light' >Lorem ipsum dolor sit amet consectetur. Laoreet ipsum amet eget nibh. Diam posuere leo eget pellentesque mattis morbi nulla imperdiet turpis.</p>
+      </div>
+    </Slider>
+      </div>
+      </div>
+      <div className='bg-white w-[50%] h-screen flex flex-col items-center justify-center' >
+        <div className='flex flex-col items-center justify-center w-[80%]' >
+      <img src={Logo} alt="" className='bg-[#F9F6F9] px-4 py-6 rounded-2xl' />
+      <h1 className='my-5' >Hello Again!</h1>
+      <p className='text-center text-[#8a8a8a]' >Lorem ipsum dolor sit amet consectetur. Arcu fermentum posuere adipiscing nisl. Urna scelerisque fringilla id ut.</p>
+      <div className='w-full my-4' >
+        <label className='ms-2 text-[#8a8a8a] text-[12px]'>E-Mail</label>
+        <input type="email" value={email}  onChange={(e) => setEmail(e.target.value) } placeholder='Enter your email' className='bg-[#F9F9F9]  my-2 px-5 py-[13px] rounded-3xl w-full text-black outline-none relative' />
+        {
+      myState.loading ?
+      <button className='bg-[#4E2357] text-white my-2 px-5 py-[9px] rounded-3xl w-full' >
+        <svg className='relative  left-[50%]' xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 200 200"><circle fill="#979797" stroke="#979797" stroke-width="15" r="15" cx="40" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></circle><circle fill="#979797" stroke="#979797" stroke-width="15" r="15" cx="100" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></circle><circle fill="#979797" stroke="#979797" stroke-width="15" r="15" cx="160" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></circle></svg>
+      </button>
+      : 
+      <button onClick={handleLogin} className='bg-[#4E2357] text-white my-2 px-5 py-[13px] rounded-3xl w-full' >
+        Login
+      </button>
+    }
     </div>
-    </div>
+        </div>
+      </div>
     </section>
     </>
   )

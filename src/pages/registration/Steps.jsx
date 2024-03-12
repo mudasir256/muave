@@ -11,6 +11,7 @@ import Subscription from '../../components/Subscription';
 import { useDispatch, useSelector } from 'react-redux';
 import Onboard from '../../components/onboard/Onboard';
 import { getPlans, userDetails , advisorOnboard } from '../../redux/user/user-actions';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const App = () => {
@@ -78,7 +79,6 @@ const App = () => {
     const handleFileDrop = (e) => {
         e.preventDefault();
         const files = e.dataTransfer.files;
-        // Handle the dropped files as needed
         handleFiles(files);
     };
 
@@ -150,7 +150,7 @@ const App = () => {
     }, [password, confirmPassword])
 
     useEffect(() => {
-        if (firmName && fileName)  {setDisabled(false) ; setFinish(false)} 
+        if (firmName && fileName)  {setDisabled(false) ; setFinish(false) ; setStep(3)} 
         else setDisabled(true);
     }, [firmName, fileName])
 
@@ -160,12 +160,34 @@ const App = () => {
 
     return <>
     <section className='bg-white' >
+    <Toaster
+    toastOptions={{
+      duration: 2000,
+      style: {
+        background: '#cdcdcd',
+        color: '#fff',
+      },
+      success: {
+      duration: 2000,
+      theme: {
+        primary: 'green',
+        secondary: 'black',        },
+      },
+      error: {
+        duration: 2000,
+        theme: {
+          primary: 'red',
+          secondary: 'black',
+        },
+      },
+    }}
+    />
     <Header />  
         <div className='flex items-center justify-between w-full min-h-[93vh]'>
         {/* respective steps body */}
         <div className='w-[70%]'>
             {
-            myState.userDetails?.role === "Owner" ? 
+            myState.userData?.role === "owner" ? 
             <>
             {step === 0 && <div className='ml-[12%] mr-[5%] flex flex-col mb-10 mt-10'>
             <div className='items-center'>
@@ -209,7 +231,7 @@ const App = () => {
                 <h5 className="pb-3 mt-2 mb-2 font-medium">Two-Factor Authentication (2FA)</h5>
                 <div className='p-3 pb-1 border border-[#cdcdcd] rounded-2xl flex justify-between w-[50%] mb-5'>
                     <h6 className="pb-3 text-sm mr-3 font-semibold">Enable Two-Factor Authentication</h6>
-                    <Switch className='bg-gray-400'  checked={multiStepData.twoFactor} name="twoFactor" onChange={(checked) => {
+                    <Switch className={`${multiStepData.twoFactor ? "custom-color" : "bg-gray-400"}`}  checked={multiStepData.twoFactor}  name="twoFactor" onChange={(checked) => {
                         setMultiStepData({
                             ...multiStepData,
                             twoFactor : checked,
@@ -222,14 +244,8 @@ const App = () => {
                     your identity when logging in.</p>
             </div>
             </div>}
-            {
-            (step === 1) ? (
-                    <>
-                    <Subscription setStep={setStep} setDisabled={setDisabled}  />
-                    </>
-            ) : null
-            }
-            {(myState.subscription && step === 2) && <div className='ml-[12%] mr-[5%] flex flex-col mb-10 mt-10'>
+            
+            {( step === 1) && <div className='ml-[12%] mr-[5%] flex flex-col mb-10 mt-10'>
                     <div className='items-center'>
                         <h1 className="text-center pb-3">Firm general information</h1>
                         <p className='text-center text-gray-400 text-sm pb-5'>Provide the necessary information on the firm you are representing. This is what your clients will see when they interact with Mauve.</p>
@@ -241,6 +257,7 @@ const App = () => {
                     <input type="text" placeholder='Enter your firm name' className='px-5 py-3 rounded-3xl w-full w-full text-black outline-none mb-4 bg-[#F9F9F9]' name='firmName' onChange={handleMultiStepData} value={multiStepData.firmName} />
                 
                     <div className='flex justify-between items-center border-2 border-[#F9F6F9] rounded-[30px] p-5'>
+                        <div className='flex items-center' >
                         {selectedImage && (
                             <div className='border border-[#cdcdcd] rounded-3xl'>
                                 <img src={selectedImage} alt="Selected" style={{ width: '200px', height: '200px' }} />
@@ -251,10 +268,11 @@ const App = () => {
                         </div>
                         }
 
-                            <div className='ml-[-150px]' >
+                            <div className='ml-10' >
                                 <h6 className='font-medium' >Firm logo (Optional)</h6>
                                 <p className='text-[#8A8A8A]' >PNG, SVG under 15MB</p>
                             </div>
+                        </div>
 
                             <div className='flex items-start justify-end'>
                             <div className={` px-3 py-[5px] rounded-2xl w-full text-black outline-none flex items-center ${fileName ? "justify-between" : ""}`} onDrop={handleFileDrop}
@@ -287,11 +305,11 @@ const App = () => {
                     </div>
 
 
-                    <div className='mt-6' >
+                    {/* <div className='mt-6' >
                         <h5 className='font-medium' >Integrations <span className='text-[#8a8a8a] font-normal' >(Optional)</span></h5>
-                    </div>
+                    </div> */}
 
-                    <div className='flex justify-between items-center' >
+                    {/* <div className='flex justify-between items-center' >
                     <div className="flex justify-between items-start my-6">
                     <div
                         className={`rounded-3xl border-2 ${
@@ -356,20 +374,25 @@ const App = () => {
                     <button className='px-[25px] py-[10px] rounded-3xl font-medium flex items-center bg-[#FBF5FC] border-2 border-[#EAE0EC] text-[#4E2357] text-[16px]' onClick={handleButtonClick}>
                     <small className='mx-2' >Request an integration</small>
                     </button>
-                    </div>
+                    </div> */}
             </div >}
             {
-            step === 3 && <div className='ml-[12%] mr-[5%] flex flex-col mb-10 mt-10'>
+            (step === 2) ? (
+            <>
+            <Subscription setStep={setStep} setDisabled={setDisabled}  />
+            </>
+            ) : null
+            }
+            {
+            (step === 3) ?<div className='ml-[12%] mr-[5%] flex flex-col mb-10 mt-10'>
             <div className='flex flex-col justify-center items-center' >  
                 <img className='bg-[#FBF5FC] p-5 rounded-3xl' src={FinishIcon} alt="" />
                 <h3 className='flex items-center mt-5' >Finish <span className='text-[#8a8a8a] mx-2' >(Optional)</span> </h3>
                 <p className='mt-5 text-[#8a8a8a] text-center px-20' >For a limited time, team members can join for free, they can copy paste a link or "add team member" by name and email and click "Invite".</p>
                 <div className='flex justify-center' >
-                {/* <button className='px-20 py-3 bg-[#FBF5FC] mt-5 rounded-3xl text-[#4E2357]' >Back</button> */}
-                {/* <button className='px-20 py-3 bg-[#4E2357] text-[#fff] mt-5 rounded-3xl text-[#4E2357] mx-5' >Finish</button> */}
                 </div>
             </div>
-            </div>
+            </div> : null
             }
             </> 
             :
@@ -415,6 +438,19 @@ const App = () => {
                     your identity when logging in.</p>
             </div>
             </div>}
+            {
+            step === 1 && <div className='ml-[12%] mr-[5%] flex flex-col mb-10 mt-10'>
+            <div className='flex flex-col justify-center items-center' >  
+                <img className='bg-[#FBF5FC] p-5 rounded-3xl' src={FinishIcon} alt="" />
+                <h3 className='flex items-center mt-5' >Finish <span className='text-[#8a8a8a] mx-2' >(Optional)</span> </h3>
+                <p className='mt-5 text-[#8a8a8a] text-center px-20' >For a limited time, team members can join for free, they can copy paste a link or "add team member" by name and email and click "Invite".</p>
+                <div className='flex justify-center' >
+                {/* <button className='px-20 py-3 bg-[#FBF5FC] mt-5 rounded-3xl text-[#4E2357]' >Back</button> */}
+                {/* <button className='px-20 py-3 bg-[#4E2357] text-[#fff] mt-5 rounded-3xl text-[#4E2357] mx-5' >Finish</button> */}
+                </div>
+            </div>
+            </div>
+            }
             </>
             }
         </div>
@@ -422,7 +458,10 @@ const App = () => {
         {/* side steps */}
         <div className='flex flex-col border-2 border-[#F9F6F9] mr-[6%] rounded-[25px] py-6 px-10 custom-css'>
         <div>
-                <Steps
+            {
+                myState.userData?.role === "owner" ?
+                <>
+                 <Steps
                     size="medium"
                     current={step}
                     items={[
@@ -433,38 +472,56 @@ const App = () => {
                         },
                         {
                             title: 'STEP 02',
-                            description : "Subscription",
+                            description : "Firm general information",
                         },
                         {
                             title: 'STEP 03',
-                            description : "Firm general information"
+                            description : "Subscription"
                         },
                         // {
                         //     title: 'STEP 04',
-                        //     description : "Team Onboarding"
-                        // },
+                        //     description : "Finish"
+                        // }
+                    ]}
+                    status={finish ? 'finish' : 'process'}
+                    direction="vertical"
+                />
+                </>
+                :
+                <>
+                 <Steps
+                    size="medium"
+                    current={step}
+                    items={[
                         {
-                            title: 'STEP 04',
+                            title: 'STEP 01',
+                            description : "Your information ",
+                            
+                        },
+                        {
+                            title: 'STEP 02',
                             description : "Finish"
                         }
                     ]}
                     status={finish ? 'finish' : 'process'}
                     direction="vertical"
                 />
+                </>
+            }
         </div>
             
         <div className='flex items-center justify-between border-t mt-4 pt-6' >
         <div className='ml-[1%] cursor-pointer rounded-3xl px-10 py-2 bg-[#F9F6F9]' onClick={() => {
-            if(myState.userDetails?.role === "Owner"){
+            if(myState.userData?.role === "owner"){
                 if (step === 0) {
-                    navigate('/registration');
+                    // navigate('/registration');
                 }
                 else if (step === 1) {
                     setStep(0);
                     setDisabled(false);
                 }
                 else if (step === 2) {
-                    setStep(0);
+                    setStep(1);
                     setDisabled(false);
                 }
                 else if (step === 3) {
@@ -484,12 +541,16 @@ const App = () => {
                 if (step === 0) {
                     navigate('/registration');
                 }
+                if (step === 1) {
+                    setStep(0);
+                    setDisabled(false)
+                }
             }
             }}>
                 Back
             </div>
             <div onClick={() => {
-            if(myState.userDetails?.role === "Owner"){
+            if(myState.userData?.role === "owner"){
                 if (step === 0) {
                     setStep(1);
                     setDisabled(true);
@@ -503,29 +564,37 @@ const App = () => {
                     setDisabled(false);
                 }
                 else if (step === 3) {
-                    setStep(4);
+                    setStep(3);
                     setDisabled(false);
                 }
-                else if (step === 4) {
-                    setStep(5);
-                    setDisabled(true);
-                }
+                // else if (step === 4) {
+                //     setStep(5);
+                //     setDisabled(true);
+                // }
             }
             else{
                 if (step === 0) {
                     setStep(1);
-                    setDisabled(true);
+                    setDisabled(false);
+                }
+                if(step === 1){
+                    setStep(1);
                 }
             }
             }}>
             {
-                myState.userDetails?.role === "Owner" ? 
+                myState.userData?.role === "owner" ? 
                 <button className={`${disable ? "bg-[#A791AB]" : "bg-[#4F2358]"} ${disable ? "text-white" : "text-white"} px-10 py-2 rounded-3xl flex text-[16px]`} disabled={disable} onClick={() => {
-                    if (step === 3) {
+                    if (step === 1) {
                         dispatch(advisorOnboard(multiStepData));
                     }
                 }}>
+                {
+                    myState?.loading ? 
+                    <svg className='relative  left-[0%]' xmlns="http://www.w3.org/2000/svg" width={48} height={19} viewBox="0 0 200 200"><circle fill="#979797" stroke="#979797" stroke-width="15" r="15" cx="40" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></circle><circle fill="#979797" stroke="#979797" stroke-width="15" r="15" cx="100" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></circle><circle fill="#979797" stroke="#979797" stroke-width="15" r="15" cx="160" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></circle></svg>
+                    :
                     <small className={`mx-2 ${disable ? "text-gray-300" : ""}`}>{step === 3 ? "Finish" : "Next"}</small>
+                }
                 </button>
                 :
                 <button className={`${disable ? "bg-[#A791AB]" : "bg-[#4F2358]"} ${disable ? "text-white" : "text-white"} px-10 py-2 rounded-3xl flex text-[16px]`} disabled={disable} onClick={() => {
@@ -533,7 +602,7 @@ const App = () => {
                         dispatch(advisorOnboard(multiStepData));
                     }
                 }}>
-                    <small className={`mx-2 ${disable ? "text-gray-300" : ""}`}>{step === 3 ? "Finish" : "Next"}</small>
+                    <small className={`mx-2 ${disable ? "text-gray-300" : ""}`}>{step === 1 ? "Finish" : "Next"}</small>
                 </button>
             }
             </div>

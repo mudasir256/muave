@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { handleAddDocument } from "../../redux/user/user-actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const AddDocument = ({setAddDocScreen}) => {
     const[document , setDocument] = useState(null);
@@ -16,6 +16,9 @@ const AddDocument = ({setAddDocScreen}) => {
     })
 
     const dispatch = useDispatch();
+    const myState = useSelector((state) => state.user);
+
+    const formData = new FormData()
     
     const handleDoc = (e) => {
         const selectedFile = e.target.files[0];
@@ -40,10 +43,18 @@ const AddDocument = ({setAddDocScreen}) => {
 
     }
 
-    const handleAddDoc = () => {
+    const handleAddDoc = async () => {
         if(docObj){
-            console.log(docObj , "DDDDDDDDDDDDDDDDDDDDDDDDDDD");
-            dispatch(handleAddDocument(docObj));
+        formData.append("clientId" , docObj.user);
+        formData.append("fileName" , docObj.docName);
+        formData.append("category" , docObj.category);
+        formData.append("status" , docObj.docStatus);
+        formData.append("Access" , docObj.access);
+        formData.append("expireDate" , docObj.expDate);
+        formData.append("file" , docObj.doc);
+
+        await dispatch(handleAddDocument(formData));
+        setAddDocScreen(false)
         }
     }
 
@@ -53,7 +64,7 @@ const AddDocument = ({setAddDocScreen}) => {
     <FaTimes className="text-xl text-[#cdcdcd] cursor-pointer" onClick={() => setAddDocScreen(false)} />
     </div>
 
-    <h3 className="font-medium text-center my-2" >Add Reminder</h3>
+    <h3 className="font-medium text-center my-2" >Add Document</h3>
     
     <div className="flex flex-col my-1 w-full" >
     <label className="text-sm ms-2" >Upload PDF file for your document</label>
@@ -67,10 +78,13 @@ const AddDocument = ({setAddDocScreen}) => {
 
     <div className="flex flex-col my-1 w-full" >
     <label className="text-sm ms-2 my-2" >Select the user of the document</label>
-    <select onChange={handleDocChange} name="user" className="px-5 py-[15px] bg-[#F5F5F5] rounded-3xl outline-none text-[13px]" >
-        <option value="USER-1">USER-1</option>
-        <option value="USER-2">USER-2</option>
-        <option value="USER-3">USER-3</option>
+    <select onChange={handleDocChange} name="user" value={docObj.user} className="px-5 py-[15px] bg-[#F5F5F5] rounded-3xl outline-none text-[13px]" >
+    <option value="">Select User</option>
+    {myState.organization?.map((elem) => (
+      <option key={elem.fullName} value={elem.id}>
+        {elem.fullName}
+      </option>
+    ))}
     </select>
     </div>
 
@@ -114,8 +128,14 @@ const AddDocument = ({setAddDocScreen}) => {
     </select>
     </div>
     </div>
-
-    <button className="px-5 py-4 mt-5 bg-[#D0D0D0] w-full rounded-xl outline-none font-medium" onClick={handleAddDoc} >Add Document</button>
+        {
+            myState.loading?
+            <button className="px-5 py-2 mt-5 bg-[#4E2357] w-full rounded-[50px] outline-none font-medium" >
+            <svg className='relative  left-[50%]' xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 200 200"><circle fill="#979797" stroke="#979797" stroke-width="15" r="15" cx="40" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></circle><circle fill="#979797" stroke="#979797" stroke-width="15" r="15" cx="100" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></circle><circle fill="#979797" stroke="#979797" stroke-width="15" r="15" cx="160" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></circle></svg>
+            </button>
+            :
+            <button className="px-5 py-4 mt-5 bg-[#4E2357] text-white w-full rounded-[50px] outline-none font-medium" onClick={handleAddDoc} >Add Document</button>
+        }
     </div>
   )
 }

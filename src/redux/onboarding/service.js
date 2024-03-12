@@ -252,8 +252,7 @@ export const postStep6 = async (obj) => {
                 name: obj.name,
                 priority: obj.priority,
                 date: obj.date,
-                description: obj.description,
-                type: obj.type
+                description: obj.description
             }
         )
         if (!response || !response.data) {
@@ -292,12 +291,177 @@ export const postStep7 = async (obj) => {
                 category: obj.category,
                 access: obj.access,
                 lastUpdated: obj.lastUpdated,
-                documentId: obj.documentId,
-                type: obj.type
+                documentId: obj.documentId
             }
         )
         if (!response || !response.data) {
             throw new Error(`Something wen't wrong on posting onboarding step 7`);
+        }
+        return response.data;
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+export const editStep2 = async (obj) => {
+    try {
+        const response = await makeRequest(
+            ONBOARDING_ENDPOINTS.STEP_EDIT[2],
+            METHODS.POST,
+            {
+                familyMemberId: obj.familyMemberId,
+                fullName: obj.familyName,
+                contactNo: obj.contactNo,
+                email: obj.email,
+                relationship: obj.relationship
+            }
+        )
+        if (!response || !response.data) {
+            throw new Error(`Something wen't wrong on posting onboarding step 2`);
+        }
+        return response.data;
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+export const deleteStep2 = async (obj) => {
+    try {
+        const response = await makeRequest(
+            ONBOARDING_ENDPOINTS.STEP_DELETE[2],
+            METHODS.POST,
+            {
+                familyMemberId: obj.familyMemberId
+            }
+        )
+        if (!response || !response.data) {
+            throw new Error(`Something wen't wrong on posting onboarding step 2`);
+        }
+        return response.data;
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+export const deleteStep3 = async (obj) => {
+    try {
+        const response = await makeRequest(
+            ONBOARDING_ENDPOINTS.STEP_DELETE[3],
+            METHODS.POST,
+            {
+                incomeId: obj.incomeId
+            }
+        )
+        if (!response || !response.data) {
+            throw new Error(`Something wen't wrong on posting onboarding step 3`);
+        }
+        return response.data;
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+export const editStep3 = async (obj) => {
+    try {
+        const response = await makeRequest(
+            ONBOARDING_ENDPOINTS.STEP_EDIT[3],
+            METHODS.POST,
+            {
+                source: obj.source,
+                totalIncome: obj.totalIncome,
+                incomeId: obj.incomeId
+            }
+        )
+        if (!response || !response.data) {
+            throw new Error(`Something wen't wrong on posting onboarding step 3`);
+        }
+        return response.data;
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+export const deleteStep4 = async (obj) => {
+    try {
+        const response = await makeRequest(
+            ONBOARDING_ENDPOINTS.STEP_DELETE[4],
+            METHODS.POST,
+            {
+                assetId: obj.assetId
+            }
+        )
+        if (!response || !response.data) {
+            throw new Error(`Something wen't wrong on posting onboarding step 4`);
+        }
+        return response.data;
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+export const editStep4 = async (obj) => {
+    try {
+        const response = await makeRequest(
+            ONBOARDING_ENDPOINTS.STEP_EDIT[4],
+            METHODS.POST,
+            {
+                assetId: obj.assetId,
+                assetName: obj.assetName,
+                assetType: obj.assetType,
+                amount: obj.amount,
+            }
+        )
+        if (!response || !response.data) {
+            throw new Error(`Something wen't wrong on posting onboarding step 4`);
+        }
+        return response.data;
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+export const deleteStep5 = async (obj) => {
+    try {
+        const response = await makeRequest(
+            ONBOARDING_ENDPOINTS.STEP_DELETE[5],
+            METHODS.POST,
+            {
+                liabilityId: obj.liabilityId
+            }
+        )
+        if (!response || !response.data) {
+            throw new Error(`Something wen't wrong on posting onboarding step 5`);
+        }
+        return response.data;
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+export const editStep5 = async (obj) => {
+    try {
+        const response = await makeRequest(
+            ONBOARDING_ENDPOINTS.STEP_EDIT[5],
+            METHODS.POST,
+            {
+                liabilityId: obj.liabilityId,
+                name: obj.name,
+                liabilityType: obj.liabilityType,
+                amount: obj.amount,
+                loanPeriodStart: obj.loanPeriodStart,
+                loanPeriodEnd: obj.loanPeriodEnd,
+            }
+        )
+        if (!response || !response.data) {
+            throw new Error(`Something wen't wrong on posting onboarding step 5`);
         }
         return response.data;
     }

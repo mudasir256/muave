@@ -1,107 +1,148 @@
-import React, { useState, useRef } from 'react';
-import UploadLogo from '../../assets/images/upload-your-logo.svg';
+import React, { useState, useRef, useEffect } from "react";
+import UploadLogo from "../../assets/images/upload-your-logo.svg";
 import Layout from "./Layout";
-import { firmSettings } from '../../redux/user/user-actions';
-import { useDispatch } from 'react-redux';
-
+import { firmSettings } from "../../redux/user/user-actions";
+import { useDispatch, useSelector } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 
 const FirmSettings = () => {
-    const dispatch = useDispatch();
-    const [fileName, setFileName] = useState(null);
-    const [firmName, setFirmName] = useState("");
-    const [link, setLink] = useState("");
-    const [selectedImage, setSelectedImage] = useState(null);
-    const fileInputRef = useRef(null);
-    const desc = "Lorem ipsum dolor sit amet consectetur. Cras nunc diam tortor tincidunt. Mi ut enim feugiat blandit egestas."
+  const dispatch = useDispatch();
+  const organization = useSelector((state) => state.user);
+  const [fileName, setFileName] = useState(null);
+  const [firmName, setFirmName] = useState("");
+  const [link, setLink] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef(null);
+  const desc =
+    "Lorem ipsum dolor sit amet consectetur. Cras nunc diam tortor tincidunt. Mi ut enim feugiat blandit egestas.";
 
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
 
-    const handleButtonClick = () => {
-        fileInputRef.current.click();
-    };
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    // Handle the dropped files as needed
+    handleFiles(files);
+  };
 
-    const handleFileDrop = (e) => {
-        e.preventDefault();
-        const files = e.dataTransfer.files;
-        // Handle the dropped files as needed
-        handleFiles(files);
-    };
+  const handleFileInputChange = (e) => {
+    const files = e.target.files;
+    // Handle the selected files as needed
+    handleFiles(files);
+  };
 
-    const handleFileInputChange = (e) => {
-        const files = e.target.files;
-        // Handle the selected files as needed
-        handleFiles(files);
-    };
+  const handleFiles = (files) => {
+    if (files.length > 0) {
+      const selectedFile = files[0];
 
-    const handleFiles = (files) => {
-        if (files.length > 0) {
-            const selectedFile = files[0];
+      setFileName(selectedFile.name);
 
-            setFileName(selectedFile.name);
+      // Read the selected image file
+      const reader = new FileReader();
 
-            // Read the selected image file
-            const reader = new FileReader();
+      reader.onload = (e) => {
+        // Set the data URL as the source for the image
+        setSelectedImage(e.target.result);
+      };
 
-            reader.onload = (e) => {
-                // Set the data URL as the source for the image
-                setSelectedImage(e.target.result);
-            };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+  useEffect(() => {
+    if (organization) {
+      setFirmName(organization?.userData?.Organization?.name);
+      setSelectedImage(organization?.userData?.Organization?.logo);
+    }
+  }, [organization]);
 
-            reader.readAsDataURL(selectedFile);
-        }
-    };
+  useEffect(() => {
+    if (organization?.temporaryOrganizationData != null) {
+      setFirmName(organization?.temporaryOrganizationData?.name);
+      setSelectedImage(organization?.temporaryOrganizationData?.logo);
+    }
+  }, [organization.temporaryOrganizationData]);
 
-    const firmSetting = <div className='ml-[2%] w-[70%] flex flex-col mb-10 mt-10'>
+  console.log(organization);
 
-    <div className='flex justify-between items-center border-2 border-[#F9F6F9] rounded-[30px] p-5'>
-                {selectedImage && (
-                    <div className='border border-[#cdcdcd] rounded-3xl'>
-                        <img src={selectedImage} alt="Selected" style={{ width: '200px', height: '200px' }} />
-                    </div>
-                )}
-                {!selectedImage && <div className='bg-[#F9F6F9] pt-20 pb-20 pl-10 pr-10 rounded-3xl'>
-                    <p className='text-gray-400 '>Logo not uploaded</p>
-                </div>
-                }
+  const firmSetting = (
+    <div className="ml-[2%] w-[70%] flex flex-col mb-10 mt-10">
+      <div className="flex justify-between items-center border-2 border-[#F9F6F9] rounded-[30px] p-5">
+        {selectedImage && (
+          <div className="border border-[#cdcdcd] rounded-3xl">
+            <img
+              src={selectedImage}
+              alt="Selected"
+              style={{ width: "200px", height: "200px", objectFit : "contain"}}
+            />
+          </div>
+        )}
+        {!selectedImage && (
+          <div className="bg-[#F9F6F9] pt-20 pb-20 pl-10 pr-10 rounded-3xl">
+            <p className="text-gray-400 ">Logo not uploaded</p>
+          </div>
+        )}
 
-                    <div className='ml-[-150px]' >
-                        <h6 className='font-medium' >Firm Picture</h6>
-                        <p className='text-[#8A8A8A]' >PNG, SVG under 15MB</p>
-                    </div>
+        <div className="ml-[-150px]">
+          <h6 className="font-medium">Firm Picture</h6>
+          <p className="text-[#8A8A8A]">PNG, SVG under 15MB</p>
+        </div>
 
-                    <div className='flex items-start justify-end'>
-                    <div className={` px-3 py-[5px] rounded-2xl w-full text-black outline-none flex items-center ${fileName ? "justify-between" : ""}`} onDrop={handleFileDrop}
-                        onDragOver={(e) => e.preventDefault()} >
-                        <div>
-                            <input
-                                type='file'
-                                ref={fileInputRef}
-                                style={{ display: 'none' }}
-                                onChange={handleFileInputChange}
-                            />
-                            <button className='px-[25px] py-[7px] rounded-3xl font-medium flex items-center bg-[#FBF5FC] border-2 border-[#EAE0EC] text-[#4E2357] text-[16px]' onClick={handleButtonClick}>
-                                <img src={UploadLogo} alt="" />
-                                <small className='mx-2' >{fileName ? fileName : "Upload New Picture"}</small>
-                            </button>
-                        </div>
-                        {/* {!fileName && <p className='text-center text-gray-400 text-sm mt-[6px] ml-3'>or drop photo here</p>} */}
-                        {fileName && <div className=' bg-[#F9F6F9] px-6 py-3 font-medium rounded-3xl ml-4 cursor-pointer' onClick={() => {
-                            setFileName(null);
-                            setSelectedImage(null);
-                        }}>
-                            <button>remove</button>
-                        </div>
-                        }
-                    </div>
-                </div>
-    </div>
+        <div className="flex items-start justify-end">
+          <div
+            className={` px-3 py-[5px] rounded-2xl w-full text-black outline-none flex items-center ${
+              fileName ? "justify-between" : ""
+            }`}
+            onDrop={handleFileDrop}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            <div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileInputChange}
+              />
+              <button
+                className="px-[25px] py-[7px] rounded-3xl font-medium flex items-center bg-[#FBF5FC] border-2 border-[#EAE0EC] text-[#4E2357] text-[16px]"
+                onClick={handleButtonClick}
+              >
+                <img src={UploadLogo} alt="" />
+                <small className="mx-2">
+                  {fileName ? fileName : "Upload New Picture"}
+                </small>
+              </button>
+            </div>
+            {/* {!fileName && <p className='text-center text-gray-400 text-sm mt-[6px] ml-3'>or drop photo here</p>} */}
+            {fileName && (
+              <div
+                className=" bg-[#F9F6F9] px-6 py-3 font-medium rounded-3xl ml-4 cursor-pointer"
+                onClick={() => {
+                  setFileName(null);
+                  setSelectedImage(null);
+                }}
+              >
+                <button>remove</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
-    {/* input fields */}
-    <div className='my-10 ms-2' >
-    <label className=' text-gray-400 text-sm'>Firm Name</label>
-    <input type="text" placeholder='Enter your firm name' onChange={(e) => setFirmName(e.target.value)} value={firmName} className='px-3 py-[14px] my-2 rounded-3xl w-full text-black outline-none mb-4 bg-[#F9F9F9]' />
-    </div>
+      {/* input fields */}
+      <div className="my-10 ms-2">
+        <label className=" text-gray-400 text-sm">Firm Name</label>
+        <input
+          type="text"
+          placeholder="Enter your firm name"
+          onChange={(e) => setFirmName(e.target.value)}
+          value={firmName}
+          className="px-3 py-[14px] my-2 rounded-3xl w-full text-black outline-none mb-4 bg-[#F9F9F9]"
+        />
+      </div>
 
-        {/* <div>
+      {/* <div>
             <h4 className="pb-3 font-medium">Firm Name</h4>
         </div>
         <label className=' text-gray-400 text-sm'>Firm Name</label>
@@ -112,7 +153,7 @@ const FirmSettings = () => {
                     <h4 className="pb-3 font-medium">Firm Logo</h4>
                 </div>
                 <label className=' text-gray-400 text-sm'>Firm Logo</label>
-                <div className={`border border-[#cdcdcd] px-3 py-[5px] rounded-2xl w-full text-black outline-none mb-4 bg-gray-100 flex ${fileName ? "justify-between" : ""}`} onDrop={handleFileDrop}
+                <div className={border border-[#cdcdcd] px-3 py-[5px] rounded-2xl w-full text-black outline-none mb-4 bg-gray-100 flex ${fileName ? "justify-between" : ""}} onDrop={handleFileDrop}
                     onDragOver={(e) => e.preventDefault()} >
                     <div>
                         <input
@@ -175,11 +216,114 @@ const FirmSettings = () => {
             <h4 className="pb-3 font-medium">Cancel membership</h4>
             <label className=' text-gray-400 text-sm'>support@mauveplanning.com</label>
         </div> */}
-        <button className='bg-[#4E2357] px-[25px] py-[10px] rounded-3xl ml-[89%] text-white' onClick={() => dispatch(firmSettings(selectedImage , firmName))} > Save</button>
+      {organization?.loading ? (
+        <button className="bg-[#4E2357] px-[25px] py-[10px] rounded-3xl ml-[89%] text-white">
+          <svg
+            className="relative  left-[50%]"
+            xmlns="http://www.w3.org/2000/svg"
+            width={30}
+            height={30}
+            viewBox="0 0 200 200"
+          >
+            <circle
+              fill="#979797"
+              stroke="#979797"
+              stroke-width="15"
+              r="15"
+              cx="40"
+              cy="100"
+            >
+              <animate
+                attributeName="opacity"
+                calcMode="spline"
+                dur="2"
+                values="1;0;1;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="-.4"
+              ></animate>
+            </circle>
+            <circle
+              fill="#979797"
+              stroke="#979797"
+              stroke-width="15"
+              r="15"
+              cx="100"
+              cy="100"
+            >
+              <animate
+                attributeName="opacity"
+                calcMode="spline"
+                dur="2"
+                values="1;0;1;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="-.2"
+              ></animate>
+            </circle>
+            <circle
+              fill="#979797"
+              stroke="#979797"
+              stroke-width="15"
+              r="15"
+              cx="160"
+              cy="100"
+            >
+              <animate
+                attributeName="opacity"
+                calcMode="spline"
+                dur="2"
+                values="1;0;1;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="0"
+              ></animate>
+            </circle>
+          </svg>
+        </button>
+      ) : (
+        <button
+          className="bg-[#4E2357] px-[25px] py-[10px] rounded-3xl ml-[89%] text-white"
+          onClick={() => dispatch(firmSettings({ selectedImage, firmName }))}
+        >
+          {" "}
+          Save
+        </button>
+      )}
+    </div>
+  );
+  return (
+    <>
+      <Toaster
+        toastOptions={{
+          duration: 2000,
+          style: {
+            background: "#cdcdcd",
+            color: "#fff",
+          },
+          success: {
+            duration: 2000,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
+          error: {
+            duration: 2000,
+            theme: {
+              primary: "red",
+              secondary: "black",
+            },
+          },
+        }}
+      />
+      <Layout
+        title={"Firm Settings"}
+        description={desc}
+        content={firmSetting}
+      />
+    </>
+  );
+};
 
-    </div >
-
-    return <Layout title={"Firm Settings"} description={desc} content={firmSetting} />
-}
-
-export default FirmSettings
+export default FirmSettings;

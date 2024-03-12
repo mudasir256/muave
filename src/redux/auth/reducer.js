@@ -3,6 +3,7 @@ import { AUTH_ACTIONS } from "./auth-constants";
 const initialState = {
     loginData: null,
     loading : false,
+    onboard : false,
     
 }
 

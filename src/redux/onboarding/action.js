@@ -15,7 +15,15 @@ import {
     getStep6,
     postStep6,
     getStep7,
-    postStep7
+    postStep7,
+    deleteStep2,
+    editStep2,
+    deleteStep3,
+    editStep3,
+    deleteStep4,
+    editStep4,
+    deleteStep5,
+    editStep5
 } from "./service";
 
 export const getOnboardingAction = () => {
@@ -284,6 +292,142 @@ export const postStep7Action = (obj) => {
             if (response) {
                 dispatch({
                     type: ONBOARDING_ACTIONS.STEP_SEVEN_DATA,
+                    payload: response
+                })
+            }
+        }
+        catch (error) {
+            return error;
+        }
+    }
+}
+
+export const editStep2Action = (obj) => {
+    return async (dispatch) => {
+        try {
+            const response = await editStep2(obj);
+            if (response) {
+                dispatch({
+                    type: ONBOARDING_ACTIONS.STEP_TWO_DATA,
+                    payload: response
+                })
+            }
+        }
+        catch (error) {
+            return error;
+        }
+    }
+}
+
+export const deleteStep2Action = (obj) => {
+    return async (dispatch) => {
+        try {
+            const response = await deleteStep2(obj);
+            if (response) {
+                dispatch({
+                    type: ONBOARDING_ACTIONS.STEP_TWO_DATA,
+                    payload: response
+                })
+            }
+        }
+        catch (error) {
+            return error;
+        }
+    }
+}
+
+export const editStep3Action = (obj) => {
+    return async (dispatch) => {
+        try {
+            const response = await editStep3(obj);
+            if (response) {
+                dispatch({
+                    type: ONBOARDING_ACTIONS.STEP_THREE_DATA,
+                    payload: response
+                })
+            }
+        }
+        catch (error) {
+            return error;
+        }
+    }
+}
+
+export const deleteStep3Action = (obj) => {
+    return async (dispatch) => {
+        try {
+            const response = await deleteStep3(obj);
+            if (response) {
+                dispatch({
+                    type: ONBOARDING_ACTIONS.STEP_THREE_DATA,
+                    payload: response
+                })
+            }
+        }
+        catch (error) {
+            return error;
+        }
+    }
+}
+
+export const editStep4Action = (obj) => {
+    return async (dispatch) => {
+        try {
+            const response = await editStep4(obj);
+            if (response) {
+                dispatch({
+                    type: ONBOARDING_ACTIONS.STEP_FOUR_DATA,
+                    payload: response
+                })
+            }
+        }
+        catch (error) {
+            return error;
+        }
+    }
+}
+
+export const deleteStep4Action = (obj) => {
+    return async (dispatch) => {
+        try {
+            const response = await deleteStep4(obj);
+            if (response) {
+                dispatch({
+                    type: ONBOARDING_ACTIONS.STEP_FOUR_DATA,
+                    payload: response
+                })
+            }
+        }
+        catch (error) {
+            return error;
+        }
+    }
+}
+
+export const editStep5Action = (obj) => {
+    return async (dispatch) => {
+        try {
+            const response = await editStep5(obj);
+            if (response) {
+                dispatch({
+                    type: ONBOARDING_ACTIONS.STEP_FIVE_DATA,
+                    payload: response
+                })
+            }
+        }
+        catch (error) {
+            return error;
+        }
+    }
+}
+
+export const deleteStep5Action = (obj) => {
+    return async (dispatch) => {
+        try {
+            const response = await deleteStep5(obj);
+            if (response) {
+                dispatch({
+                    type: ONBOARDING_ACTIONS.STEP_FIVE_DATA,
                     payload: response
                 })
             }

@@ -5,6 +5,7 @@ import Tabs from '../../components/Tabs';
 // Tabs
 import Beneficiaries from './Reports/Beneficiaries';
 import Fiduciaries from './Reports/Fiduciaries';
+import GoalPlanning from './Reports/GoalPlanning';
 
 const Client = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Client = () => {
         {
             key: '1',
             label: 'Goal Planning',
-            children: 'Content of Tab Goal Planning',
+            children: GoalPlanning(),
         },
         {
             key: '2',
@@ -51,9 +52,9 @@ const Client = () => {
 
             <div>
 
-                <div className="tri-state-toggle">
+                <div className="tri-state-toggle-b">
                     <button
-                        className={`tri-state-toggle-button${overview ? '-active' : ''}`}
+                        className={`tri-state-toggle-button-b${overview ? '-active' : ''}`}
                         id="toggle-button1"
                         onClick={() => {
                             setOverview(true);
@@ -64,7 +65,7 @@ const Client = () => {
                         Overview
                     </button>
                     <button
-                        className={`tri-state-toggle-button${estate ? '-active' : ''}`}
+                        className={`tri-state-toggle-button-b${estate ? '-active' : ''}`}
                         id="toggle-button2"
                         onClick={() => {
                             setOverview(false);
@@ -75,7 +76,7 @@ const Client = () => {
                         Estate
                     </button>
                     <button
-                        className={`tri-state-toggle-button${document ? '-active' : ''}`}
+                        className={`tri-state-toggle-button-b${document ? '-active' : ''}`}
                         id="toggle-button3"
                         onClick={() => {
                             setOverview(false);
@@ -93,13 +94,13 @@ const Client = () => {
             <div className='flex'>
 
                 <label className='pr-3 mt-3'>Client : </label>
-                <div className='bg-[rgba(11,11,11,0.1)] p-2 rounded-2xl mt-2 mb-2 text-sm mr-5'>
+                <div className='bg-[white] p-2 rounded-2xl mt-2 mb-2 text-sm mr-5'>
                     <select className='bg-[rgba(244,241,241,0.1)]' name="client" id="client">
                         <option value="James Johnson">James Johnson</option>
                     </select>
                 </div>
 
-                <div className='items pt-4 flex mb-1 cursor-pointer' onClick={() => navigate('/settings/account')}>
+                {/* <div className='items pt-4 flex mb-1 cursor-pointer' onClick={() => navigate('/settings/account')}>
                     <div style={{
                         width: '15px',
                         height: '15px',
@@ -108,7 +109,7 @@ const Client = () => {
                     }} className='ml-2 mr-2'>
                     </div>
                     <p>Settings</p>
-                </div>
+                </div> */}
 
             </div>
 

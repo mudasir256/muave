@@ -3,7 +3,7 @@ import { usePlaidLink } from 'react-plaid-link';
 
 const Plaid = () => {
     const { open, ready } = usePlaidLink({
-        token: 'link-sandbox-f309464f-6b37-4aab-b91c-4921b1dfd07d', /* link_token from /plaid-get-token api */
+        token: 'link-sandbox-bd99f1a9-ebba-4531-b0d8-8d3726209752', /* link_token from /plaid-get-token api */
         onSuccess: (public_token, metadata) => {
             // send public_token to server
             console.log('Your public token is', public_token);

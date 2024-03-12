@@ -12,12 +12,14 @@ import ClientLogo from '../../assets/images/client-and-team-logo.svg';
 import LogoutLogo from '../../assets/images/logout.svg';
 import { FaAngleLeft } from "react-icons/fa";
 import { FaRegUser , FaUsers } from "react-icons/fa6";
+import { useSelector } from 'react-redux';
 
 const Layout = ({ title, content , description }) => {
     const navigate = useNavigate();
+    const myState = useSelector((state) => state.user);
 
     const handleBack = () => {
-        navigate(-1);
+        navigate("/user/dashboard")    
       };
     const items = [
         {
@@ -50,11 +52,11 @@ const Layout = ({ title, content , description }) => {
             route: '/settings/notification',
             icon: NotiLogo,
         },
-        {
-            text: 'Referral Link',
-            route: '/settings/referral',
-            icon : ReferalLogo
-        }
+        // {
+        //     text: 'Referral Link',
+        //     route: '/settings/referral',
+        //     icon : ReferalLogo
+        // }
     ];
 
     return <div className='flex settings'>
@@ -66,7 +68,7 @@ const Layout = ({ title, content , description }) => {
                 padding:"30px 20px"
             }}>
                 <img src={Logo} alt="logo" width={"120px"} className='border-r-2 pr-2' />
-                <img src={SubLogo} alt="logo" className='pl-1' width={"150px"} />
+                <img src={myState?.userData?.Organization?.logo} alt="logo" className='pl-1' width={"70px"} />
             </div>
             <div id="menu ">
                 {items.map((item) => <><div className='items flex items-center pt-10 pb-2 flex mb-1 px-2 cursor-pointer border-b-2 border-[#F9F9F9]' onClick={() => navigate(item.route)}>

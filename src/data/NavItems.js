@@ -3,4 +3,4 @@ export const items = [
     "clients & reports",
     "action & Goals",
     "Documents",
-    ]
+]

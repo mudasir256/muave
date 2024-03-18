@@ -6,6 +6,7 @@ import Tabs from '../../components/Tabs';
 import Beneficiaries from './Reports/Beneficiaries';
 import Fiduciaries from './Reports/Fiduciaries';
 import GoalPlanning from './Reports/GoalPlanning';
+import DocumentList from '../../components/document/DocumentList';
 
 const Client = () => {
     const navigate = useNavigate();
@@ -114,10 +115,15 @@ const Client = () => {
             </div>
 
         </div>
+    { document && <div className='mt-3'>
+            <DocumentList />
+        </div>
+    }
 
-        <div className='mt-3'>
+    { estate && <div className='mt-3'>
             <Tabs items={items} defaultKey={"4"} />
         </div>
+    }
     </div>
 }
 

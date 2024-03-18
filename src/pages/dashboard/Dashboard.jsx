@@ -4,7 +4,7 @@ import Dots from "../../assets/images/dots.png";
 import Onboard from "../../components/onboard/Onboard";
 import { useState } from "react";
 import AddReminder from "../../components/reminder/AddReminder";
-import AddDocument from "../../components/add-document/AddDocument";
+import AddDocument from "../../components/document/AddDocument";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineUser } from "react-icons/ai";
 import { AiOutlineFileText } from "react-icons/ai";

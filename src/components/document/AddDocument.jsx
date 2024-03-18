@@ -14,7 +14,6 @@ const AddDocument = ({setAddDocScreen}) => {
         expDate:"",
         access:"",
     })
-
     const dispatch = useDispatch();
     const myState = useSelector((state) => state.user);
 
@@ -44,17 +43,20 @@ const AddDocument = ({setAddDocScreen}) => {
     }
 
     const handleAddDoc = async () => {
-        if(docObj){
-        formData.append("clientId" , docObj.user);
-        formData.append("fileName" , docObj.docName);
-        formData.append("category" , docObj.category);
-        formData.append("status" , docObj.docStatus);
-        formData.append("Access" , docObj.access);
-        formData.append("expireDate" , docObj.expDate);
-        formData.append("file" , docObj.doc);
-
-        await dispatch(handleAddDocument(formData));
-        setAddDocScreen(false)
+        if (docObj) {
+            const { user, docName, category, docStatus, access, expDate, doc } = docObj;
+            const clientId = myState.userData?.role === 'owner' ? user : myState.userData?.id;
+    
+            formData.append("clientId", clientId);
+            formData.append("fileName", docName);
+            formData.append("category", category);
+            formData.append("status", docStatus);
+            formData.append("Access", access);
+            formData.append("expireDate", expDate);
+            formData.append("file", doc);
+    
+            await dispatch(handleAddDocument(formData));
+            setAddDocScreen(false);
         }
     }
 
@@ -76,7 +78,7 @@ const AddDocument = ({setAddDocScreen}) => {
     </div>
     </div>
 
-    <div className="flex flex-col my-1 w-full" >
+    {myState.userData?.role === 'owner' && <div className="flex flex-col my-1 w-full">
     <label className="text-sm ms-2 my-2" >Select the user of the document</label>
     <select onChange={handleDocChange} name="user" value={docObj.user} className="px-5 py-[15px] bg-[#F5F5F5] rounded-3xl outline-none text-[13px]" >
     <option value="">Select User</option>
@@ -86,7 +88,7 @@ const AddDocument = ({setAddDocScreen}) => {
       </option>
     ))}
     </select>
-    </div>
+    </div>}
 
     <div className="flex flex-col my-1" >
     <label className="text-sm ms-2 my-2" >Document Name</label>
